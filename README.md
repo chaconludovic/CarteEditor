@@ -1,4 +1,4 @@
 CarteEditor
 ===========
 
-using Leaflet.js
+using Leaflet.js, leaflet.draw.js
