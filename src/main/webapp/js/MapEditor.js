@@ -23,19 +23,31 @@ L.MapEditor = L.Class.extend({
                         [51.5, -0.06],
                         [51.52, -0.03]
                     ]);
-        polygon.editing.enable();
+//        polygon.editing.enable();
 
         var drawnItems = new L.FeatureGroup([polygon]);
         map.addLayer(drawnItems);
-
+        
+        var MyCustomMarker = L.Icon.extend({
+            options: {
+                shadowUrl: null,
+                iconAnchor: new L.Point(12, 12),
+                iconSize: new L.Point(44, 44),
+                iconUrl: 'image/marker.png'
+            }
+        });
+        
         var drawControl = new L.Control.Draw({
             draw: {
-        				polygon: {
-        					shapeOptions: {
-        						color: 'red'
-        					},
-        				},
-        			},
+                    polygon: {
+                        shapeOptions: {
+                            color: 'red'
+                        },
+                    },
+                    marker: {
+                        icon: new MyCustomMarker()
+                    }
+                },
             edit: {
                 featureGroup: drawnItems
             }
@@ -49,6 +61,16 @@ L.MapEditor = L.Class.extend({
                 alert("Latitude : " + layer._latlng.lat + ", longitude : " + layer._latlng.lng);
             }
             drawnItems.addLayer(layer);
+        });
+        map.on('draw:edited', function (e) {
+            var layers = e.layers;
+            layers.eachLayer(function (layer) {
+                for (var i in layer._latlngs) {
+                    alert("Latitude : " + layer._latlngs[i].lat + ", longitude : " + layer._latlngs[i].lng);
+                }
+
+                //do whatever you want, most likely save back to db
+            });
         });
 
        
